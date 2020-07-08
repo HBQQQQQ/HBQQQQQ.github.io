@@ -23,27 +23,27 @@
   <meta name="description" content="就很nice~">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Rebeccaのブログ">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/archives/2020/07/index.html">
 <meta property="og:site_name" content="Rebeccaのブログ">
 <meta property="og:description" content="就很nice~">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:author" content="Rebecca">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/">
+<link rel="canonical" href="http://yoursite.com/archives/2020/07/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
+    isHome : false,
     isPost : false,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>Rebeccaのブログ</title>
+  <title>归档 | Rebeccaのブログ</title>
   
 
 
@@ -152,137 +152,49 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content archive">
             
-      
+
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/08/%E9%95%9C%E5%83%8F%E6%A0%91/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
-      <meta itemprop="name" content="Rebecca">
-      <meta itemprop="description" content="就很nice~">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Rebeccaのブログ">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/07/08/%E9%95%9C%E5%83%8F%E6%A0%91/" class="post-title-link" itemprop="url">二叉树的镜像</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-07-08 14:14:03 / 修改时间：14:15:23" itemprop="dateCreated datePublished" datetime="2020-07-08T14:14:03+08:00">2020-07-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
+  
+  <div class="post-block">
+    <div class="posts-collapse">
+      <div class="collection-title">
+        <span class="collection-header">嗯..! 目前共计 2 篇日志。 继续努力。</span>
+      </div>
 
       
-          <p>JZ18 二叉树的镜像<br>操作给定的二叉树，将其变换为源二叉树的镜像。</p>
-<p>struct TreeNode {<br>    int val;<br>    struct TreeNode *left;<br>    struct TreeNode *right;<br>    TreeNode(int x) :<br>            val(x), left(NULL), right(NULL) {<br>    }<br>};</p>
-<p>class Solution {<br>public:<br>         //栈的非递归<br>     void Mirror(TreeNode <em>pRoot) {<br>         if (pRoot == NULL)return;<br>         stack&lt;TreeNode</em>&gt; st;<br>         TreeNode* p = NULL;<br>         st.push(pRoot);<br>         while (st.size())<br>         {<br>             p = st.top();<br>             st.pop();<br>             swap(p-&gt;left, p-&gt;right);<br>             if (p-&gt;left)st.push(p-&gt;left);<br>             if (p-&gt;right)st.push(p-&gt;right);<br>         }<br>     }<br>//队列的非递归<br>    void Mirror(TreeNode <em>pRoot) {<br>         if (pRoot == NULL)return;<br>         queue&lt;TreeNode</em>&gt; qu;<br>         TreeNode* p = NULL;<br>         qu.push(pRoot);<br>         while (qu.size())<br>         {<br>             p = qu.front();<br>             qu.pop();<br>             swap(p-&gt;left, p-&gt;right);<br>             if (p-&gt;left)qu.push(p-&gt;left);<br>             if (p-&gt;right)qu.push(p-&gt;right);<br>         }<br>    }<br>    //递归<br>    void Mirror(TreeNode *pRoot) {<br>         if (pRoot == NULL)return;<br>         swap(pRoot-&gt;left, pRoot-&gt;right);<br>         Mirror(pRoot-&gt;left);<br>         Mirror(pRoot-&gt;right);<br>    }<br>};</p>
-
-      
+    <div class="collection-year">
+      <span class="collection-header">2020</span>
     </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2020-07-08T14:14:03+08:00"
+              content="2020-07-08">
+          07-08
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2020/07/08/%E9%95%9C%E5%83%8F%E6%A0%91/" itemprop="url">
+            <span itemprop="name">二叉树的镜像</span>
+          </a>
+      </div>
+
+    </header>
   </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/%E6%AF%95%E4%B8%9A%E5%BF%AB%E4%B9%90/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
-      <meta itemprop="name" content="Rebecca">
-      <meta itemprop="description" content="就很nice~">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Rebeccaのブログ">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/22/%E6%AF%95%E4%B8%9A%E5%BF%AB%E4%B9%90/" class="post-title-link" itemprop="url">🎓毕业快乐</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-06-22 19:14:21 / 修改时间：19:47:36" itemprop="dateCreated datePublished" datetime="2020-06-22T19:14:21+08:00">2020-06-22</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <center>🎓前程似锦，万事胜意。愿你跃入人海，做一朵奔涌的浪花🌊</center>
-
-      
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
+  </div>
   
   
   
-
 
   
 
