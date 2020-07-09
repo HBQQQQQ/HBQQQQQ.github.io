@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。   1. 非递归方法  🌲借助队列，对二叉树进行层次遍历在层次遍历的过程中，每次当队列中某一层的节点出队完成后，高度+1。🌲关键点：判别队列中某一层节点出队完成的标准是什么？在出队之前，此时队列中记录的只有某一层节点，所以队列的大小就是某一层节点的个数。当此个数减到0的">
+  <meta name="description" content="1. 为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？Sigmoid的输出结果是伯努利分布P(y1|X), P(y2|X),..., P(yn|X)  Softmax输出的是多项分布P(y1, y2,..., yn|X)  对于二分类问题：Softmax输出两个值，和为1；Sigmoid也输出两个值，但是这两个值没有可加性，两个值各自是0-1的某个数。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="二叉树的深度">
-<meta property="og:url" content="http://yoursite.com/2020/07/08/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%B7%B1%E5%BA%A6/index.html">
+<meta property="og:title" content="Sigmoid和Softmax的区别">
+<meta property="og:url" content="http://yoursite.com/2020/07/09/sigmoid-softmax/index.html">
 <meta property="og:site_name" content="Rebeccaのブログ">
-<meta property="og:description" content="输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。   1. 非递归方法  🌲借助队列，对二叉树进行层次遍历在层次遍历的过程中，每次当队列中某一层的节点出队完成后，高度+1。🌲关键点：判别队列中某一层节点出队完成的标准是什么？在出队之前，此时队列中记录的只有某一层节点，所以队列的大小就是某一层节点的个数。当此个数减到0的">
+<meta property="og:description" content="1. 为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？Sigmoid的输出结果是伯努利分布P(y1|X), P(y2|X),..., P(yn|X)  Softmax输出的是多项分布P(y1, y2,..., yn|X)  对于二分类问题：Softmax输出两个值，和为1；Sigmoid也输出两个值，但是这两个值没有可加性，两个值各自是0-1的某个数。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-07-08T06:34:58.000Z">
-<meta property="article:modified_time" content="2020-07-09T13:44:07.471Z">
+<meta property="article:published_time" content="2020-07-09T11:22:20.000Z">
+<meta property="article:modified_time" content="2020-07-09T13:46:09.402Z">
 <meta property="article:author" content="Rebecca">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2020/07/08/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%B7%B1%E5%BA%A6/">
+<link rel="canonical" href="http://yoursite.com/2020/07/09/sigmoid-softmax/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>二叉树的深度 | Rebeccaのブログ</title>
+  <title>Sigmoid和Softmax的区别 | Rebeccaのブログ</title>
   
 
 
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/08/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%B7%B1%E5%BA%A6/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/09/sigmoid-softmax/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
@@ -174,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          二叉树的深度
+          Sigmoid和Softmax的区别
         </h1>
 
         <div class="post-meta">
@@ -183,23 +183,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-07-08 14:34:58" itemprop="dateCreated datePublished" datetime="2020-07-08T14:34:58+08:00">2020-07-08</time>
+              <time title="创建时间：2020-07-09 19:22:20 / 修改时间：21:46:09" itemprop="dateCreated datePublished" datetime="2020-07-09T19:22:20+08:00">2020-07-09</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-09 21:44:07" itemprop="dateModified" datetime="2020-07-09T21:44:07+08:00">2020-07-09</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index"><span itemprop="name">剑指offer</span></a>
+                  <a href="/categories/%E5%9F%BA%E7%A1%80%F0%9F%90%B1/" itemprop="url" rel="index"><span itemprop="name">基础🐱</span></a>
                 </span>
             </span>
 
@@ -214,21 +208,29 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <font size=3>
+        <h5 id="1-为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？"><a href="#1-为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？" class="headerlink" title="1. 为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？"></a>1. 为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？</h5><table><tr><td bgcolor="#FFEBCD">Sigmoid的输出结果是伯努利分布P(y1|X), P(y2|X),..., P(yn|X) </br>
+Softmax输出的是多项分布P(y1, y2,..., yn|X) </br>
+对于二分类问题：Softmax输出两个值，和为1；Sigmoid也输出两个值，但是这两个值没有可加性，两个值各自是0-1的某个数。</td></tr></table>
+<font size=3> 
 
-<p><strong>输入一棵二叉树，求该树的深度。从根结点到叶结点依次经过的结点（含根、叶结点）形成树的一条路径，最长路径的长度为树的深度。</strong></p>
+<p>🌰<strong>举例</strong>：假设（0，1）代表 ‘是’，（1，0）代表 ‘否’。Softmax可能输出（0.3，0.7），代表算法认为 ‘是’的概率是0.7，相加为1；Sigmoid的输出可能是（0.4，0.8），它们相加不为1，意思是算法认为输出第一位为1的概率是0.4，第一位不为1的概率是0.6，第二位为1的概率是0.8，第二位不为1的概率是0.2。<br>神经网络分类器最终结果为某一向量，即“原始输出值”，如[-0.5, 1.2, -0.1, 2.4]，这四个输出值分别对应胸部X光检查后发现的肺炎、心脏肥大、瘤和脓肿。但这些原始输出值不容易理解，所以需要利用Sigmoid或Softmax将其转换为概率。Sigmoid函数会分别处理各个原始输出值，因此其结果相互独立，概率总和不一定为1：[0.37, 0.77, 0.48, 0.91]；Softmax函数的输出值相互关联，其概率的总和始终为1：[0.04, 0.21, 0.05, 0.70]<br>💡<font color="#bd4147"><strong>当Sigmoid函数的某个输出接近1或者0的时候就会产生梯度消失，严重影响优化速度，而Softmax没有这个问题。</strong></font><br /><br></font><br></font></p>
+<h5 id="2-如何选择Sigmoid和Softmax？"><a href="#2-如何选择Sigmoid和Softmax？" class="headerlink" title="2. 如何选择Sigmoid和Softmax？"></a>2. 如何选择Sigmoid和Softmax？</h5><font size=3> 
+设计模型执行分类任务（如对胸部X光检查到的疾病或手写数字进行分类）时，有时需要同时选择多个答案（如同时选择肺炎和脓肿），有时只能选择一个答案（如数字“8”）。
+
+<p><strong>选择依据</strong>：<br></font></p>
+<table><tr><td bgcolor="#D1EEEE">Sigmoid = 多标签分类问题 = 多个正确答案 = 非独占输出（例如胸部X光检查、住院）</td></tr></table>
+<font size=3>
+构建分类器，解决有多个正确答案的问题时，用Sigmoid函数分别处理各个原始输出值。  
+由于Sigmoid函数分别应用于每个原始输出值，因此可能出现的输出情况包括：所有类别概率都很低（如“此胸部X光检查没有异常”），一种类别的概率很高但是其他类别的概率很低（如“胸部X光检查仅发现肺炎”），多个或所有类别的概率都很高（如“胸部X光检查发现肺炎和脓肿”）。
 </font>
 
-<h5 id="1-非递归方法"><a href="#1-非递归方法" class="headerlink" title="1. 非递归方法"></a>1. 非递归方法</h5><font size=3>
+<table><tr><td bgcolor="#D1EEEE">Softmax = 多类别分类问题 = 只有一个正确答案 = 互斥输出（例如手写数字，鸢尾花）</td></tr></table>
+<font size=3>
+构建分类器，解决只有唯一正确答案的问题时，用Softmax函数处理各个原始输出值。
+Softmax函数的分母综合了原始输出值的所有因素，这意味着，Softmax函数得到的不同概率之间相互关联。区分手写数字时，用Softmax函数处理原始输出值，如要增加某一示例被分为“8”的概率，就要降低该示例被分到其他数字的概率。
 
-<p>🌲借助队列，对二叉树进行层次遍历<br>在层次遍历的过程中，每次当队列中某一层的节点出队完成后，高度+1。<br>🌲关键点：判别队列中某一层节点出队完成的标准是什么？<br>在出队之前，此时队列中记录的只有某一层节点，所以队列的大小就是某一层节点的个数。当此个数减到0的时候，则说明该层节点全部出队完成。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">left</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">TreeNode</span> *<span class="title">right</span>;</span></span><br><span class="line">    TreeNode(<span class="keyword">int</span> x) :</span><br><span class="line">            val(x), left(<span class="literal">NULL</span>), right(<span class="literal">NULL</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">TreeDepth</span><span class="params">(TreeNode* pRoot)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!pRoot) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">queue</span> &lt;TreeNode*&gt; q;</span><br><span class="line">        q.push(pRoot);</span><br><span class="line">        <span class="keyword">int</span> level=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(!q.empty())&#123;</span><br><span class="line">            <span class="keyword">int</span> sz = q.size();<span class="comment">//size控制level增长的次数，当同一层的元素没有完全退出队列的时候level不可以增加</span></span><br><span class="line">            <span class="keyword">while</span>(sz--)&#123;</span><br><span class="line">                TreeNode* node = q.front();</span><br><span class="line">                q.pop();</span><br><span class="line">                <span class="keyword">if</span>(node-&gt;left) q.push(node-&gt;left);</span><br><span class="line">                <span class="keyword">if</span>(node-&gt;right) q.push(node-&gt;right);</span><br><span class="line">            &#125;</span><br><span class="line">            level++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> level;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</font>
-
-<h5 id="2-递归方法"><a href="#2-递归方法" class="headerlink" title="2. 递归方法"></a>2. 递归方法</h5><font size=3>
-
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">TreeDepth</span><span class="params">(TreeNode* pRoot)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pRoot ? max(TreeDepth(pRoot-&gt;left),TreeDepth(pRoot-&gt;right))+<span class="number">1</span> :<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</font>
+<hr>
+<p>当分割目标是一个二分类目标，有一些代码使用的是最后一个卷积层输出2 channel的feature map，在这两张channel上做Softmax；另外一些代码中，最后一个卷积层直接输出1 channel的feature map，在这单张feature map上做Sigmoid。<br>💡<font color="#bd4147"><strong>对于二分类问题，在理论上Sigmoid和Softmax的效果是等价的。</strong></font><br /><br></font></p>
 
     </div>
 
@@ -244,13 +246,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/08/%E9%95%9C%E5%83%8F%E6%A0%91/" rel="prev" title="二叉树的镜像">
-      <i class="fa fa-chevron-left"></i> 二叉树的镜像
+    <a href="/2020/07/09/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%8B%E4%B8%80%E4%B8%AA%E7%BB%93%E7%82%B9/" rel="prev" title="二叉树的下一个结点">
+      <i class="fa fa-chevron-left"></i> 二叉树的下一个结点
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/07/08/%E6%A0%88%E5%92%8C%E9%98%9F%E5%88%97%E7%9A%84%E8%BD%AC%E6%8D%A2/" rel="next" title="栈和队列的转换">
-      栈和队列的转换 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -309,7 +308,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-非递归方法"><span class="nav-number">1.</span> <span class="nav-text">1. 非递归方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-递归方法"><span class="nav-number">2.</span> <span class="nav-text">2. 递归方法</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么现在一般深度学习的分类模型最后输出层都用Softmax而不是简单的Sigmoid？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-如何选择Sigmoid和Softmax？"><span class="nav-number">2.</span> <span class="nav-text">2. 如何选择Sigmoid和Softmax？</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
