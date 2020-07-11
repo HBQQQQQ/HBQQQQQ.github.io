@@ -128,7 +128,7 @@
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">7</span></a>
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">11</span></a>
 
   </li>
   </ul>
@@ -158,6 +158,353 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%B0%83%E5%8F%82%E6%8A%80%E5%B7%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
+      <meta itemprop="name" content="Rebecca">
+      <meta itemprop="description" content="就很nice~">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rebeccaのブログ">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/11/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%B0%83%E5%8F%82%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">深度学习调参技巧</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-11 18:53:55 / 修改时间：20:34:54" itemprop="dateCreated datePublished" datetime="2020-07-11T18:53:55+08:00">2020-07-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9F%BA%E7%A1%80%F0%9F%90%B1/" itemprop="url" rel="index"><span itemprop="name">基础🐱</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="一、-卷积核权重初始化方式"><a href="#一、-卷积核权重初始化方式" class="headerlink" title="一、 卷积核权重初始化方式"></a>一、 卷积核权重初始化方式</h4><font size=3>
+
+<p>● 初始化为0<br>● 随机初始化<br>● Xavier 初始化<br>● He 初始化<br></font></p>
+<h5 id="1-初始化为0"><a href="#1-初始化为0" class="headerlink" title="1. 初始化为0"></a>1. 初始化为0</h5><font size=3>
+
+<p>在线性回归，logistics回归的时候，基本上都是把参数初始化为0，模型也能够很好地工作。然而在神经网络中，把w初始化为0是不可以的。这是因为如果把w初始化0，那么每一层的神经元学到的东西都是一样的（输出是一样的），而且在bp的时候，每一层内的神经元也是相同的，因为他们的gradient相同。代价函数会很快收敛而且几乎没有什么变化（0.69–&gt;0.64）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">initialize_parameters_zeros</span><span class="params">(layers_dims)</span>:</span></span><br><span class="line">    parameters = &#123;&#125;</span><br><span class="line">    np.random.seed(<span class="number">3</span>)</span><br><span class="line">    L = len(layers_dims)  <span class="comment"># number of layers in the network</span></span><br><span class="line">    <span class="keyword">for</span> l <span class="keyword">in</span> range(<span class="number">1</span>, L):</span><br><span class="line">        parameters[<span class="string">'W'</span> + str(l)] = np.zeros((layers_dims[l], layers_dims[l - <span class="number">1</span>]))</span><br><span class="line">        parameters[<span class="string">'b'</span> + str(l)] = np.zeros((layers_dims[l], <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> parameters</span><br></pre></td></tr></table></figure>
+</font>
+
+<h5 id="2-随机初始化"><a href="#2-随机初始化" class="headerlink" title="2. 随机初始化"></a>2. 随机初始化</h5><font size=3>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">initialize_parameters_random</span><span class="params">(layers_dims)</span>:</span></span><br><span class="line">    np.random.seed(<span class="number">3</span>)  <span class="comment"># This seed makes sure your "random" numbers will be the as ours</span></span><br><span class="line">    parameters = &#123;&#125;</span><br><span class="line">    L = len(layers_dims)  <span class="comment"># integer representing the number of layers</span></span><br><span class="line">    <span class="keyword">for</span> l <span class="keyword">in</span> range(<span class="number">1</span>, L):</span><br><span class="line">        parameters[<span class="string">'W'</span> + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - <span class="number">1</span>])*<span class="number">0.01</span></span><br><span class="line">        parameters[<span class="string">'b'</span> + str(l)] = np.zeros((layers_dims[l], <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> parameters</span><br></pre></td></tr></table></figure>
+<p>乘0.01是因为要把W随机初始化到一个相对较小的值，因为如果X很大的话，W又相对较大，会导致Z非常大，这样如果激活函数是sigmoid，就会导致sigmoid的输出值1或者0，然后会导致一系列问题（比如cost function计算的时候，log里是0，这样会有点麻烦）。</p>
+<p>但是随机初始化也有缺点，np.random.randn()其实是一个均值为0，方差为1的高斯分布中采样。当神经网络的层数增多时，会发现越往后面的层的激活函数（使用tanH）的输出值几乎都接近于0，因此会导致梯度消失。<br></font></p>
+<h5 id="3-Xavier-初始化"><a href="#3-Xavier-初始化" class="headerlink" title="3. Xavier 初始化"></a>3. Xavier 初始化</h5><font size=3>
+
+<p>Xavier 是 Glorot 等人为了解决随机初始化的问题提出来的另一种初始化方法，他们的思想倒也简单，就是尽可能的让输入和输出服从相同的分布，这样就能够避免后面层的激活函数的输出值趋向于0。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">initialize_parameters_he</span><span class="params">(layers_dims)</span>:</span></span><br><span class="line">    np.random.seed(<span class="number">3</span>)</span><br><span class="line">    parameters = &#123;&#125;</span><br><span class="line">    L = len(layers_dims)  <span class="comment"># integer representing the number of layers</span></span><br><span class="line">    <span class="keyword">for</span> l <span class="keyword">in</span> range(<span class="number">1</span>, L):</span><br><span class="line">        parameters[<span class="string">'W'</span> + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - <span class="number">1</span>]) * np.sqrt(<span class="number">1</span> / layers_dims[l - <span class="number">1</span>])</span><br><span class="line">        parameters[<span class="string">'b'</span> + str(l)] = np.zeros((layers_dims[l], <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> parameters</span><br></pre></td></tr></table></figure>
+<p>深层的激活函数输出值还是非常漂亮的服从标准高斯分布。虽然Xavier initialization能够很好的适应 tanH 激活函数，但是对于目前神经网络中最常用的ReLU激活函数，还是无能为力，当达到5，6层后几乎又开始趋向于0，更深层的话很明显又会趋向于0。<br></font></p>
+<h5 id="4-He-初始化"><a href="#4-He-初始化" class="headerlink" title="4. He 初始化"></a>4. He 初始化</h5><font size=3>
+
+<p>为了解决上面的问题，何恺明提出了一种针对ReLU的初始化方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">initialize_parameters_he</span><span class="params">(layers_dims)</span>:</span></span><br><span class="line">    np.random.seed(<span class="number">3</span>)</span><br><span class="line">    parameters = &#123;&#125;</span><br><span class="line">    L = len(layers_dims)  <span class="comment"># integer representing the number of layers</span></span><br><span class="line">    <span class="keyword">for</span> l <span class="keyword">in</span> range(<span class="number">1</span>, L):</span><br><span class="line">        parameters[<span class="string">'W'</span> + str(l)] = np.random.randn(layers_dims[l], layers_dims[l - <span class="number">1</span>]) * np.sqrt(<span class="number">2</span> / layers_dims[l - <span class="number">1</span>])</span><br><span class="line">        parameters[<span class="string">'b'</span> + str(l)] = np.zeros((layers_dims[l], <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> parameters</span><br></pre></td></tr></table></figure>
+<p>现在神经网络中，隐藏层常使用ReLU，权重初始化常用He initialization这种方法。<br>Relu激活函数初始化推荐使用He初始化，tanh初始化推荐使用Xavier初始化<br></font></p>
+<h4 id="二、Tips"><a href="#二、Tips" class="headerlink" title="二、Tips"></a>二、Tips</h4><font size=3>
+
+<p>● 刚开始, 先上小规模数据, 模型往大了放, 只要不爆显存, 能用256个filter就别用128个。 直接奔着过拟合去，就是训练过拟合网络, 连测试集验证集这些都可以不用。</p>
+<p>为什么?<br>验证自己的训练脚本的流程对不对。这一步小数据量, 生成速度快, 但是所有的脚本都是和未来大规模训练一致的(除了少跑点循环)<br>如果小数据量下, 这么粗暴的大网络奔着过拟合去都没效果. 那么, 你要开始反思自己了, 模型的输入输出是不是有问题? 要不要检查自己的代码(永远不要怀疑工具库, 除非你动过代码)? 模型解决的问题定义是不是有问题? 你对应用场景的理解是不是有错? </p>
+<p>● Loss设计要合理<br>一般来说分类就是Softmax, 回归就是L2的loss. 但是要注意loss的错误范围(主要是回归), 你预测一个label是10000的值, 模型输出0, 你算算这loss多大, 这还是单变量的情况下. 一般结果都是nan。 所以不仅仅输入要做normalization, 输出也要这么弄。<br>多任务情况下, 各loss想法限制在一个量级上, 或者最终限制在一个量级上, 初期可以着重一个任务的loss。</p>
+<p>● 观察loss胜于观察准确率<br>准确率虽然是评测指标, 但是训练过程中还是要注意loss的。在有些情况下, 准确率是突变的, 原来一直是0, 可能保持上千迭代, 然后突然变1。 </p>
+<p>● Learning Rate设置合理<br>太大: loss爆炸, 或者nan<br>太小: 半天loss没反映(但是, LR需要降低的情况也是这样, 这里可视化网络中间结果, 不是weights, 有效果, 俩者可视化结果是不一样的, 太小的话中间结果有点水波纹或者噪点的样子, 因为filter学习太慢的原因, 试过就会知道很明显)<br>需要进一步降低了: loss在当前LR下一路降了下来, 但是半天不再降了。</p>
+<p>● 有很多无脑的配置确实可以尝试，比如3x3的卷积核，relu激活函数，加shuffle，加数据增强，加BN，加Dropout等。dropout可以从0. 5往上加，optimizer可以用Adam或者SGD+0.8/0.9的Momentum。大部分时候这些经验比你自己辛苦挑出来的奇技淫巧要有价值的多，但不是绝对的。</p>
+<p>● 一般常用的防止过拟合方法有使用L1正则项、L2正则项、dropout、提前终止、数据集扩充等。如果模型在训练集上表现比较好但在测试集上表现欠佳可以选择增大L1或L2正则的惩罚力度（L2正则经验上首选1.0，超过10很少见），或增大dropout的随机失活概率（经验首选0.5）；或者当随着训练的持续在测试集上不增反降时，使用提前终止训练的方法。当然最有效的还是增大训练集的规模，实在难以获得新数据也可以使用数据集增强的方法，比如CV任务可以对数据集进行裁剪、翻转、平移等方法进行数据集增强，这种方法往往都会提高最后模型的测试精度。</p>
+<p>● 如果希望训练一个更深更复杂的网络，那么残差块绝对是一个重要的组件，它可以让你的网络训练的更深。</p>
+<p>● BN层具有加速训练速度，有效防止梯度消失与梯度爆炸，具有防止过拟合的效果，所以构建网络时最好要加上这个组件。<br></font></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/11/%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
+      <meta itemprop="name" content="Rebecca">
+      <meta itemprop="description" content="就很nice~">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rebeccaのブログ">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/11/%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">重建二叉树</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-11 17:28:26 / 修改时间：18:35:33" itemprop="dateCreated datePublished" datetime="2020-07-11T17:28:26+08:00">2020-07-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index"><span itemprop="name">剑指offer</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <font size=3>
+
+<p><strong>输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。</strong><br>🌟<strong>解法思路：</strong><br>前序遍历的第一个元素为根结点，根据这个根结点的值我们可以找到它在中序遍历序列中的位置。中序遍历中该值的左侧为左子树，右侧为右子树。通过寻找中序遍历中root的位置可以得到左子树的长度count，于是可以根据count得到中序遍历中左子树右端点和右子树左端点的位置。再根据count可以在前序遍历序列中得到左子树右端点和右子树左端点的位置。递归求解即可。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode *<span class="title">rebuild</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; pre, <span class="keyword">int</span> preleft, <span class="keyword">int</span> preright, </span></span></span><br><span class="line"><span class="function"><span class="params">                      <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; in, <span class="keyword">int</span> inleft, <span class="keyword">int</span> inright)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(preleft&gt;preright) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">int</span> value = pre[preleft];</span><br><span class="line">        TreeNode *root = <span class="keyword">new</span> TreeNode(value);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(value!=in[count])</span><br><span class="line">            ++count;</span><br><span class="line">        count = count-inleft;</span><br><span class="line"></span><br><span class="line">        root-&gt;left = rebuild(pre, preleft+<span class="number">1</span>, preleft+count, in, inleft, inleft+count);</span><br><span class="line">        root-&gt;right = rebuild(pre, preleft+count+<span class="number">1</span>, preright, in, inleft+count+<span class="number">1</span>, inright);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">TreeNode* <span class="title">reConstructBinaryTree</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; pre,<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vin)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> rebuild(pre, <span class="number">0</span>, pre.size()<span class="number">-1</span>, vin, <span class="number">0</span>, vin.size()<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>已知前序，中序遍历，求后续遍历完整代码：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">TreeNode *<span class="title">rebuild</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; pre, <span class="keyword">int</span> preleft, <span class="keyword">int</span> preright,</span></span></span><br><span class="line"><span class="function"><span class="params">                      <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; in, <span class="keyword">int</span> inleft, <span class="keyword">int</span> inright)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(preleft&gt;preright) <span class="keyword">return</span> <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">int</span> value = pre[preleft];</span><br><span class="line">        TreeNode *root = <span class="keyword">new</span> TreeNode(value);</span><br><span class="line">        <span class="keyword">int</span> count=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(value!=in[count])</span><br><span class="line">            ++count;</span><br><span class="line">        count = count-inleft;</span><br><span class="line">        </span><br><span class="line">        root-&gt;left = rebuild(pre, preleft+<span class="number">1</span>, preleft+count, in, inleft, inleft+count);</span><br><span class="line">        root-&gt;right = rebuild(pre, preleft+count+<span class="number">1</span>, preright, in, inleft+count+<span class="number">1</span>, inright);</span><br><span class="line">        <span class="keyword">return</span> root;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">postOrder</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root) <span class="keyword">return</span>;</span><br><span class="line">        postOrder(root-&gt;left);</span><br><span class="line">        postOrder(root-&gt;right);</span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;root-&gt;val&lt;&lt;<span class="string">" "</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; pre = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">7</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">8</span>&#125;;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; in = &#123;<span class="number">4</span>,<span class="number">7</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">3</span>,<span class="number">8</span>,<span class="number">6</span>&#125;;</span><br><span class="line">    Solution s;</span><br><span class="line">    TreeNode* root = s.rebuild(pre, <span class="number">0</span>, pre.size()<span class="number">-1</span>, in, <span class="number">0</span>, in.size()<span class="number">-1</span>);</span><br><span class="line">    s.postOrder(root);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出结果：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">7 4 2 5 8 6 3 1</span><br></pre></td></tr></table></figure>
+</font>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/10/%E5%88%A4%E6%96%AD%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
+      <meta itemprop="name" content="Rebecca">
+      <meta itemprop="description" content="就很nice~">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rebeccaのブログ">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/10/%E5%88%A4%E6%96%AD%E5%B9%B3%E8%A1%A1%E4%BA%8C%E5%8F%89%E6%A0%91/" class="post-title-link" itemprop="url">判断平衡二叉树</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-10 19:29:19" itemprop="dateCreated datePublished" datetime="2020-07-10T19:29:19+08:00">2020-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-11 11:49:22" itemprop="dateModified" datetime="2020-07-11T11:49:22+08:00">2020-07-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index"><span itemprop="name">剑指offer</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h5 id="一、自顶向下"><a href="#一、自顶向下" class="headerlink" title="一、自顶向下"></a>一、自顶向下</h5><font size=3>
+判断一个数是否为平衡二叉树。平衡二叉树是左子树的高度与右子树的高度差的绝对值小于等于1，同样左子树是平衡二叉树，右子树为平衡二叉树。
+
+<p>根据定义，如果我们能够求出以每个结点为根的树的高度，然后再根据左右子树高度差绝对值小于等于1，就可以判断以每个结点为根的树是否满足定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">depth</span><span class="params">(TreeNode* root)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> root?max(depth(root-&gt;left),depth(root-&gt;right))+<span class="number">1</span>:<span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">IsBalanced_Solution</span><span class="params">(TreeNode* pRoot)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (pRoot==<span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">int</span> dleft = depth(pRoot-&gt;left);</span><br><span class="line">        <span class="keyword">int</span> dright = depth(pRoot-&gt;right);</span><br><span class="line">        <span class="keyword">int</span> diff = <span class="built_in">abs</span>(dleft-dright);</span><br><span class="line">        <span class="keyword">if</span>(diff&gt;<span class="number">1</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">return</span> IsBalanced_Solution(pRoot-&gt;left)&amp;&amp;IsBalanced_Solution(pRoot-&gt;right);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>优点：只要求出给定二叉树的高度，就可以方便的判断出二叉树是平衡二叉树，思路简单，代码简洁。<br>缺点：由于每个节点都会被重复遍历多次，这造成时间效率不高。<br></font></p>
+<h5 id="二、自底向上"><a href="#二、自底向上" class="headerlink" title="二、自底向上"></a>二、自底向上</h5><font size=3>
+采用后序遍历的方式遍历二叉树的每一个节点，在遍历到一个节点之前我们就已经遍历了它的左右子树。此时，记录每个节点为根节点的树的高度，就可以一边遍历一边判断每个节点是不是平衡的。
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">IsBalanced</span><span class="params">(TreeNode* root, <span class="keyword">int</span>* depth)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!root)&#123;</span><br><span class="line">            *depth = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> dleft,dright;</span><br><span class="line">        <span class="keyword">bool</span> bleft = IsBalanced(root-&gt;left, &amp;dleft);</span><br><span class="line">        <span class="keyword">bool</span> bright = IsBalanced(root-&gt;right, &amp;dright);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(bleft&amp;&amp;bright)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">abs</span>(dleft-dright)&lt;=<span class="number">1</span>)&#123;</span><br><span class="line">                *depth = <span class="number">1</span>+(dleft&gt;dright?dleft:dright);</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">IsBalanced_Solution</span><span class="params">(TreeNode* pRoot)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> depth = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> IsBalanced(pRoot, &amp;depth);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">depth</span><span class="params">(TreeNode *root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!root) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> dleft = depth(root-&gt;left);</span><br><span class="line">        <span class="keyword">if</span> (dleft == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> dright = depth(root-&gt;right);</span><br><span class="line">        <span class="keyword">if</span> (dright == <span class="number">-1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">int</span> diff = <span class="built_in">abs</span>(dleft - dright);</span><br><span class="line">        <span class="keyword">if</span> (diff &gt; <span class="number">1</span>) <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">return</span> max(dleft, dright) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">IsBalanced_Solution</span><span class="params">(TreeNode* root)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> depth(root) != <span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</font>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/10/%E5%AE%A1%E7%A8%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
+      <meta itemprop="name" content="Rebecca">
+      <meta itemprop="description" content="就很nice~">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Rebeccaのブログ">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/07/10/%E5%AE%A1%E7%A8%BF/" class="post-title-link" itemprop="url">How to Properly Review AI Papers</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-10 16:17:23" itemprop="dateCreated datePublished" datetime="2020-07-10T16:17:23+08:00">2020-07-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-11 11:48:50" itemprop="dateModified" datetime="2020-07-11T11:48:50+08:00">2020-07-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h4 id="Main-Pricinples"><a href="#Main-Pricinples" class="headerlink" title="Main Pricinples"></a>Main Pricinples</h4><h5 id="1-己所不欲，勿施于人"><a href="#1-己所不欲，勿施于人" class="headerlink" title="1.己所不欲，勿施于人"></a>1.己所不欲，勿施于人</h5><font size=3>
+
+<p>Submit the reviews on time<br>Spend enough time understanding the paper<br>Be constructive（有建设性）<br>Do not use small excuses to reject<br>Do not simply wave the two big sticks：“No/little novelty”&amp;“Poor/insufficient experiments”<br>Do not force a gazillion of new experiments<br>Do read other reviews and rebuttal (be open-minded)<br></font></p>
+<h5 id="2-Look-for-Reasons-to-Accept"><a href="#2-Look-for-Reasons-to-Accept" class="headerlink" title="2.Look for Reasons to Accept"></a>2.Look for Reasons to Accept</h5><font size=3>
+
+<p>● What is novelty?<br>○ Novel problem (most exciting) or generalizable method or deep insight<br>○ Novel solution to an existing problem<br>○ Is “combination of known components” by definition trivial?（对已有组分的组合是微不足道的吗）</p>
+<p>💡<strong>Novelty</strong><br>✨<strong>很少有idea完全是新的！</strong><br>transfer from other scientific fields (e.g., image retrieval)<br>independent rediscovery (e.g., RANSAC)<br>engineering application of theory (e.g., MRFs)<br>assembly of known components (e.g., panorama stitching)<br>✨<strong>什么算是novelty？</strong><br>new <strong>question</strong> nobody thought of yet (e.g., Im2GPS)<br>new technical <strong>solution</strong> to a known problem (e.g., FlowNet)<br>better <strong>analysis and understanding</strong> (e.g., ResNets as ensembles)<br>better <strong>results</strong> (e.g., Monodepth)</p>
+<p>● How important is higher performance? 不以百分点论英雄<br>○ Statistically significant? sufficient data size?<br>○ Pure brute-force?</p>
+<p>● A balancing act<br>○ Highly novel/exciting but with clear flaws (has enough been demonstrated?)<br>○ Flawless but not exciting (what could the community learn from such work?)</p>
+<p>● Terminology game（术语游戏）<br>○ Does the same terminology mean the same thing?<br>○ Does different terminologies mean something new?<br></font></p>
+<h5 id="3-Writing-is-Important"><a href="#3-Writing-is-Important" class="headerlink" title="3.Writing is Important"></a>3.Writing is Important</h5><font size=3>
+
+<p>● Paper is written for others (HELP REVIEWERS HELP YOU!)<br>○ Clarity<br>○ Proper English<br>○ Neat tables, illustrative figures, and effective examples<br>○ Is “paper gestalt” justified? (can you train yourself?)<br>■ Deep Paper Gestalt claims it can safely reject 50% of the bad papers while wrongly reject only 0.4% of the good papers</p>
+<p>● Innocent mistakes<br>○ Apparent errors (symbols, equations, annotations, references)</p>
+<p>● Intentional/malicious acts<br>○ Ignore important/well-known/recent/classic references (reinventing the wheel)<br>○ Smoke and mirror (for GPU abuse)</p>
+<p>● Could poor writing be the reason to reject<br>○ Did the authors respect the reviewers and their time, and act professional?</p>
+</font>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/09/sigmoid-softmax/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -183,7 +530,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-07-09 19:22:20 / 修改时间：21:46:09" itemprop="dateCreated datePublished" datetime="2020-07-09T19:22:20+08:00">2020-07-09</time>
+              <time title="创建时间：2020-07-09 19:22:20 / 修改时间：21:52:08" itemprop="dateCreated datePublished" datetime="2020-07-09T19:22:20+08:00">2020-07-09</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -271,10 +618,16 @@ Softmax函数的分母综合了原始输出值的所有因素，这意味着，S
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-07-09 15:15:39 / 修改时间：21:37:19" itemprop="dateCreated datePublished" datetime="2020-07-09T15:15:39+08:00">2020-07-09</time>
+              <time title="创建时间：2020-07-09 15:15:39" itemprop="dateCreated datePublished" datetime="2020-07-09T15:15:39+08:00">2020-07-09</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-10 19:25:44" itemprop="dateModified" datetime="2020-07-10T19:25:44+08:00">2020-07-10</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -619,7 +972,7 @@ Softmax函数的分母综合了原始输出值的所有因素，这意味着，S
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-09 21:44:30" itemprop="dateModified" datetime="2020-07-09T21:44:30+08:00">2020-07-09</time>
+                <time title="修改时间：2020-07-09 21:51:13" itemprop="dateModified" datetime="2020-07-09T21:51:13+08:00">2020-07-09</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -662,86 +1015,11 @@ Softmax函数的分母综合了原始输出值的所有因素，这意味着，S
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/%E6%AF%95%E4%B8%9A%E5%BF%AB%E4%B9%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
-      <meta itemprop="name" content="Rebecca">
-      <meta itemprop="description" content="就很nice~">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Rebeccaのブログ">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/22/%E6%AF%95%E4%B8%9A%E5%BF%AB%E4%B9%90/" class="post-title-link" itemprop="url">🎓毕业快乐</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-06-22 19:14:21" itemprop="dateCreated datePublished" datetime="2020-06-22T19:14:21+08:00">2020-06-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-09 21:44:53" itemprop="dateModified" datetime="2020-07-09T21:44:53+08:00">2020-07-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <font size=3>
-
-<center>🎓前程似锦，万事胜意。愿你跃入人海，做一朵奔涌的浪花🌊</center>
-
-</font>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  </nav>
 
 
 
@@ -808,7 +1086,7 @@ Softmax函数的分母综合了原始输出值的所有因素，这意味着，S
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">11</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
