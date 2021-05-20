@@ -158,7 +158,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/23/%E5%B8%8C%E6%9C%9B%E4%BD%99%E7%94%9F%E6%98%AF%E4%BD%A0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/23/%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89%E7%8E%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpg#/images/avatar.gif">
@@ -172,7 +172,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2020/11/23/%E5%B8%8C%E6%9C%9B%E4%BD%99%E7%94%9F%E6%98%AF%E4%BD%A0/" class="post-title-link" itemprop="url">希望余生是你</a>
+            <a href="/2020/11/23/%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E4%B8%AD%E6%98%AF%E5%90%A6%E6%9C%89%E7%8E%AF/" class="post-title-link" itemprop="url">判断链表中是否有环</a>
         </h2>
 
         <div class="post-meta">
@@ -183,7 +183,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-11-23 19:49:43 / 修改时间：19:56:46" itemprop="dateCreated datePublished" datetime="2020-11-23T19:49:43+08:00">2020-11-23</time>
+              <time title="创建时间：2020-11-23 20:11:35 / 修改时间：20:18:43" itemprop="dateCreated datePublished" datetime="2020-11-23T20:11:35+08:00">2020-11-23</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -191,7 +191,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E9%9A%8F%E7%AC%94/" itemprop="url" rel="index"><span itemprop="name">随笔</span></a>
+                  <a href="/categories/%E5%89%91%E6%8C%87offer/" itemprop="url" rel="index"><span itemprop="name">剑指offer</span></a>
                 </span>
             </span>
 
@@ -207,10 +207,10 @@
 
       
           <font size=3>
+🌲解法：快慢指针，快指针走两步，慢指针走一步，如果有环则快慢指针一定会相遇，否则快指针到null。
 
-<center>我从不把感情归结于命运或是缘分，只有两个人愿不愿意争取，若互相觉得是值得，那便够了。
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasCycle</span><span class="params">(ListNode head)</span> </span>&#123;</span><br><span class="line">        ListNode p = head;</span><br><span class="line">        ListNode q = head;</span><br><span class="line">        <span class="keyword">while</span>(p!=<span class="keyword">null</span> &amp;&amp; p.next!=<span class="keyword">null</span>)&#123;</span><br><span class="line">            p = p.next.next;</span><br><span class="line">            q = q.next;</span><br><span class="line">            <span class="keyword">if</span>(p==q)&#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>所以很荣幸遇见你，感谢你不放弃，希望余生依然是你。</center></p>
 </font>
 
       
@@ -1028,7 +1028,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
